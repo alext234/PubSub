@@ -51,7 +51,9 @@ namespace PubSub {
         }
             
 
-        virtual void onNotified(const T& e){}
+        virtual void onNotified(const T& e){ // supposed to be pure virtual (=0) but gcc4.9 gives error
+            assert(0); //subclass should override  this function
+        }
         
     };
 
