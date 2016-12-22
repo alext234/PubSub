@@ -149,13 +149,33 @@ TEST(PubSub, registerSharedPtr ) {
     };
 
     auto  a = make_shared<A>();
-    subscribe<Event<1>>(&*a);  // not nice trick still
-
+    subscribe<Event<1>>(a); 
     notify(Event<1>{200}); 
     ASSERT_THAT(a->receivedVal, Eq(200));
 
 
+    unsubscribe<Event<1>>(a); 
+    a->receivedVal=0;
+    notify(Event<1>{300}); 
+    ASSERT_THAT(a->receivedVal, Eq(0));
 }
+
+TEST(PubSub, registerWithLambda ) {
+
+
+    int receivedVal=0;
+
+    subscribe<Event<1>>([&receivedVal] (const Event<1>& e) -> void {
+        receivedVal = e.val;
+    });  
+
+    notify(Event<1>{200}); 
+    ASSERT_THAT(receivedVal, Eq(200));
+
+
+}
+
+
 int main(int argc, char *argv[])
 {
 	testing::InitGoogleMock (&argc, argv);
