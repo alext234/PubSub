@@ -77,6 +77,63 @@ TEST(PubSub, registerAndNotifyMultipleEvents ) {
 
 }
 
+TEST(PubSub, multipleObjectsMultipleEvents ) {
+
+
+    class A:public Subscriber<Event<1>> {
+    public:
+        void onNotified (const Event<1>& e)override {
+            receivedVal=e.val;
+        }
+
+        int receivedVal=0;
+    };
+
+    class B:public Subscriber<Event<2>> {
+    public:
+        void onNotified (const Event<2>& e)override {
+            receivedVal=e.val;
+        }
+
+        int receivedVal=0;
+    };
+
+    A a;
+    subscribe<Event<1>>(&a); 
+    B b;
+    subscribe<Event<2>>(&b); 
+
+
+    notify(Event<1>{100}); // should not crash here as a is already destroyed
+    notify(Event<2>{200}); // should not crash here as a is already destroyed
+
+    ASSERT_THAT(a.receivedVal, Eq(100));
+    ASSERT_THAT(b.receivedVal, Eq(200));
+
+
+
+}
+
+TEST(PubSub, registerThenDestroy ) {
+
+
+    class A:public Subscriber<Event<1>> {
+    public:
+        void onNotified (const Event<1>& e)override {
+            receivedVal1=e.val;
+        }
+
+        int receivedVal1=0;
+    };
+
+    {
+        A a;
+        subscribe<Event<1>>(&a); 
+    } // exit scope, a is destroyed
+    notify(Event<1>{200}); // should not crash here as a is already destroyed
+
+
+}
 int main(int argc, char *argv[])
 {
 	testing::InitGoogleMock (&argc, argv);
