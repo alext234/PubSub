@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "pubsub.h"
+#include <memory>
 
 using namespace std;
 using namespace PubSub;
@@ -131,6 +132,27 @@ TEST(PubSub, registerThenDestroy ) {
         subscribe<Event<1>>(&a); 
     } // exit scope, a is destroyed
     notify(Event<1>{200}); // should not crash here as a is already destroyed
+
+
+}
+
+TEST(PubSub, registerSharedPtr ) {
+
+
+    class A:public Subscriber<Event<1>> {
+    public:
+        void onNotified (const Event<1>& e)override {
+            receivedVal=e.val;
+        }
+
+        int receivedVal=0;
+    };
+
+    auto  a = make_shared<A>();
+    subscribe<Event<1>>(&*a);  // not nice trick still
+
+    notify(Event<1>{200}); 
+    ASSERT_THAT(a->receivedVal, Eq(200));
 
 
 }
