@@ -51,7 +51,7 @@ namespace PubSub {
         }
             
 
-        virtual void onNotified(const T& e)=0;
+        virtual void onNotified(const T& e){}
         
     };
 
