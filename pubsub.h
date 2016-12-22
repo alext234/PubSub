@@ -58,9 +58,9 @@ namespace pubsub {
         };
 
         auto sub = std::make_shared<Sub> (f);
-        static std::vector<std::shared_ptr<Sub>> listOfSub ; // list to hold the shared_ptr to prevent them from being destroyed when this function returns
+        static std::vector<std::shared_ptr<Sub>> lambdalistOfSub ; // list to hold the shared_ptr to prevent them from being destroyed when this function returns
 
-        listOfSub.push_back(sub);
+        lambdalistOfSub.push_back(sub);
         subscribe<T>(&*sub); 
 
     }
