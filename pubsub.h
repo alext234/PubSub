@@ -3,7 +3,7 @@
 #include <unordered_set>
 #include <type_traits>
 
-namespace PubSub {
+namespace pubsub {
 
     template <typename T>
     class Subscriber ;

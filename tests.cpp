@@ -3,7 +3,7 @@
 #include <memory>
 
 using namespace std;
-using namespace PubSub;
+using namespace pubsub;
 using namespace testing;
 
 TEST(PubSub, registerAndNotify ) {
