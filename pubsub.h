@@ -14,19 +14,18 @@ namespace PubSub {
 
         virtual void onNotified(const T& e)=0;
         
-        template<typename T2> 
-        void subscribe() {
-          subscribersSet.insert(this); 
-        }
-        template<typename T2> 
-        void unsubscribe() {
-          subscribersSet.erase(this); 
-        }
     private:
         static std::unordered_set<Subscriber<T>*> subscribersSet;
             
         template <typename T2>                
         friend void notify (const T2& e); 
+
+        template <typename T2>                
+        friend void subscribe (Subscriber<T2>* sub); 
+
+
+        template <typename T2>                
+        friend void unsubscribe (Subscriber<T2>* sub); 
     };
 
 
@@ -42,6 +41,16 @@ namespace PubSub {
 
     }
 
+    template <typename T>                
+    void subscribe (Subscriber<T>* sub) {
+        Subscriber<T>::subscribersSet.insert(sub); 
+
+    }
+    template <typename T>                
+    void unsubscribe (Subscriber<T>* sub) {
+        Subscriber<T>::subscribersSet.erase(sub); 
+
+    }
 } // namespace PubSub
 
 
