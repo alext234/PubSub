@@ -33,5 +33,5 @@ int main() {
 
 ```
 
-More examples can be found in [tests.cpp](../blob/master/tests.cpp), such as when *a* is *shared_ptr*. Other usecases include lambdas and subscribing to multiple events.
+More examples can be found in [tests.cpp](../master/tests.cpp), such as when *a* is *shared_ptr*. Other usecases include lambdas and subscribing to multiple events.
 
