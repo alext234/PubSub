@@ -26,12 +26,10 @@ namespace pubsub {
 
     }
     
-    template <typename T>                
-    static std::vector<std::shared_ptr<Subscriber<T>>> listOfSub ; 
 
     template <typename T>                
     void subscribe (std::shared_ptr<Subscriber<T>> sub) {
-        listOfSub<T>.push_back (sub);
+        Subscriber<T>::listOfSub.push_back (sub);
         subscribe(&*sub); 
 
     }
@@ -39,9 +37,9 @@ namespace pubsub {
     template <typename T>                
     void unsubscribe (std::shared_ptr<Subscriber<T>> sub) {
         
-        listOfSub<T>.erase (  
-            std::remove (    listOfSub<T>.begin(),    listOfSub<T>.end(), sub),
-            listOfSub<T>.end() );
+        Subscriber<T>::listOfSub.erase (  
+            std::remove (    Subscriber<T>::listOfSub.begin(),    Subscriber<T>::listOfSub.end(), sub),
+            Subscriber<T>::listOfSub.end() );
         unsubscribe(&*sub); 
 
     }
@@ -76,6 +74,7 @@ namespace pubsub {
     class Subscriber {
     private:
         static std::unordered_set<Subscriber<T>*> subscribersSet;
+        static std::vector<std::shared_ptr<Subscriber<T>>> listOfSub ; 
             
         template <typename T2>                
         friend void notify (const T2& e); 
@@ -88,6 +87,14 @@ namespace pubsub {
 
         template <typename T2>                
         friend void unsubscribe (Subscriber<T2>* sub); 
+
+
+        template <typename T2>                
+        friend void subscribe (std::shared_ptr<Subscriber<T2>> sub) ;
+
+        template <typename T2>
+        friend void unsubscribe (std::shared_ptr<Subscriber<T2>> sub) ;
+
     public:
         Subscriber(){}
         virtual ~Subscriber() {
@@ -105,6 +112,8 @@ namespace pubsub {
     template <typename T>
     std::unordered_set<Subscriber<T>*> Subscriber<T>::subscribersSet;
 
+    template <typename T>                
+    std::vector<std::shared_ptr<Subscriber<T>>> Subscriber<T>::listOfSub ; 
 } // namespace PubSub
 
 
